@@ -3,32 +3,165 @@
     <body>
         <div id="root"></div>
     </body>
-    <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script type="text/babel">
+        // #3.5 Inputs and State ~ #3.9 Final Practice and Recap
+
+        const MinutesToHours = () => {
+            // useState: 첫 번째 - value / 두 번째 - function
+            const [minutes, setMinutes] = React.useState("");
+            const [flipped, setFlipped] = React.useState(false);
+
+            /**
+             * React도 VanillaJS와 거의 비슷, event 활용
+             * SyntheticBaseEvent - nativeEvent - target - value
+             */
+            const onChange = (event) => {
+                setMinutes(event.target.value);
+            };
+
+            const reset = () => setMinutes("");
+
+            // const onFlip = () => setFlipped(!flipped);
+            const onFlip = () => {
+                reset();
+                setFlipped((current) => !current);
+            };
+
+            return (
+                /**
+                 * html에서 선점한 몇몇 이름들은 JSX에서 사용 불가
+                 * class -> className
+                 * for -> htmlFor
+                 */
+                <div>
+                    <div>
+                        <label htmlFor="minutes">Minutes </label>
+                        <input
+                            id="minutes"
+                            // 삼항연산자 활용
+                            value={flipped ? minutes * 60 : minutes}
+                            type="number"
+                            placeholder="Minutes"
+                            onChange={onChange}
+                            // disabled={flipped === true}
+                            disabled={flipped}
+                        />
+                    </div>
+
+                    <div>
+                        <label htmlFor="hours">Hours </label>
+                        <input
+                            id="hours"
+                            // value={Math.round(minutes / 60)}
+                            // 삼항연산자 활용
+                            value={flipped ? minutes : minutes / 60}
+                            type="number"
+                            placeholder="Hours"
+                            onChange={onChange}
+                            // disabled: 입력 불가
+                            // disabled={flipped === false}
+                            disabled={!flipped}
+                        />
+                    </div>
+
+                    <button onClick={reset}>Reset</button>
+                    <button onClick={onFlip}>Flip</button>
+                </div>
+            );
+        };
+
+        const MilesToKm = () => {
+            // useState: 첫 번째 - value / 두 번째 - function
+            const [miles, setMiles] = React.useState("");
+            const [flipped, setFlipped] = React.useState(false);
+
+            /**
+             * React도 VanillaJS와 거의 비슷, event 활용
+             * SyntheticBaseEvent - nativeEvent - target - value
+             */
+            const onChange = (event) => {
+                setMiles(event.target.value);
+            };
+
+            const reset = () => setMiles("");
+
+            // const onFlip = () => setFlipped(!flipped);
+            const onFlip = () => {
+                reset();
+                setFlipped((current) => !current);
+            };
+
+            return (
+                /**
+                 * html에서 선점한 몇몇 이름들은 JSX에서 사용 불가
+                 * class -> className
+                 * for -> htmlFor
+                 */
+                <div>
+                    <div>
+                        <label htmlFor="miles">Miles </label>
+                        <input
+                            id="miles"
+                            // 삼항연산자 활용
+                            value={flipped ? miles / 1.609344 : miles}
+                            type="number"
+                            placeholder="Miles"
+                            onChange={onChange}
+                            // disabled={flipped === true}
+                            disabled={flipped}
+                        />
+                    </div>
+
+                    <div>
+                        <label htmlFor="hours">Km </label>
+                        <input
+                            id="km"
+                            // value={Math.round(minutes / 60)}
+                            // 삼항연산자 활용
+                            value={flipped ? miles : miles * 1.609344}
+                            type="number"
+                            placeholder="Km"
+                            onChange={onChange}
+                            // disabled: 입력 불가
+                            // disabled={flipped === false}
+                            disabled={!flipped}
+                        />
+                    </div>
+
+                    <button onClick={reset}>Reset</button>
+                    <button onClick={onFlip}>Flip</button>
+                </div>
+            );
+        };
+
+        /**
+         * 컴포넌트는 그 안에 또 다른 컴포넌트를 렌더링 가능
+         * 분할 정복(divide and conquer)
+         */
+        const App = () => {
+            const [index, setIndex] = React.useState("select");
+            const onSelect = (event) => {
+                setIndex(event.target.value);
+            };
+            return (
+                <div>
+                    <h1>Super Converter</h1>
+                    <select value={index} onChange={onSelect}>
+                        <option value="select">- Select Units -</option>
+                        <option value="0">Minutes & Hours</option>
+                        <option value="1">Km & Miles</option>
+                    </select>
+                    <hr />
+                    {index === "0" ? <MinutesToHours /> : null}
+                    {index === "1" ? <MilesToKm /> : null}
+                </div>
+            );
+        };
+
         const root = document.getElementById("root");
-
-        let counter = 0;
-
-        function countUp() {
-            counter = counter + 1;
-            render();
-        }
-
-        // 페이지를 계속 render하는 것은 안 좋은 선택
-        // React의 강점은 필요한 부분만(UI상에서) 리렌더링 함
-        function render() {
-            ReactDOM.render(<App />, root);
-        }
-
-        const App = () => (
-            <div>
-                <h3>Total clicks: {counter}</h3>
-                <button onClick={countUp}>Click me</button>
-            </div>
-        );
-
         ReactDOM.render(<App />, root);
     </script>
 </html>

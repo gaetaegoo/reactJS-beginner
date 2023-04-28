@@ -5,158 +5,44 @@
     </body>
     <script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script type="text/babel">
-        // #3.5 Inputs and State ~ #3.9 Final Practice and Recap
+        // #4.2 Prop Types
 
-        const MinutesToHours = () => {
-            // useState: 첫 번째 - value / 두 번째 - function
-            const [minutes, setMinutes] = React.useState("");
-            const [flipped, setFlipped] = React.useState(false);
-
-            /**
-             * React도 VanillaJS와 거의 비슷, event 활용
-             * SyntheticBaseEvent - nativeEvent - target - value
-             */
-            const onChange = (event) => {
-                setMinutes(event.target.value);
-            };
-
-            const reset = () => setMinutes("");
-
-            // const onFlip = () => setFlipped(!flipped);
-            const onFlip = () => {
-                reset();
-                setFlipped((current) => !current);
-            };
-
+        // prop을 받아 오면서 기본값을 설정할 수 있음
+        const Btn = ({ text, fontSize = 12 }) => {
             return (
-                /**
-                 * html에서 선점한 몇몇 이름들은 JSX에서 사용 불가
-                 * class -> className
-                 * for -> htmlFor
-                 */
-                <div>
-                    <div>
-                        <label htmlFor="minutes">Minutes </label>
-                        <input
-                            id="minutes"
-                            // 삼항연산자 활용
-                            value={flipped ? minutes * 60 : minutes}
-                            type="number"
-                            placeholder="Minutes"
-                            onChange={onChange}
-                            // disabled={flipped === true}
-                            disabled={flipped}
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="hours">Hours </label>
-                        <input
-                            id="hours"
-                            // value={Math.round(minutes / 60)}
-                            // 삼항연산자 활용
-                            value={flipped ? minutes : minutes / 60}
-                            type="number"
-                            placeholder="Hours"
-                            onChange={onChange}
-                            // disabled: 입력 불가
-                            // disabled={flipped === false}
-                            disabled={!flipped}
-                        />
-                    </div>
-
-                    <button onClick={reset}>Reset</button>
-                    <button onClick={onFlip}>Flip</button>
-                </div>
-            );
-        };
-
-        const MilesToKm = () => {
-            // useState: 첫 번째 - value / 두 번째 - function
-            const [miles, setMiles] = React.useState("");
-            const [flipped, setFlipped] = React.useState(false);
-
-            /**
-             * React도 VanillaJS와 거의 비슷, event 활용
-             * SyntheticBaseEvent - nativeEvent - target - value
-             */
-            const onChange = (event) => {
-                setMiles(event.target.value);
-            };
-
-            const reset = () => setMiles("");
-
-            // const onFlip = () => setFlipped(!flipped);
-            const onFlip = () => {
-                reset();
-                setFlipped((current) => !current);
-            };
-
-            return (
-                /**
-                 * html에서 선점한 몇몇 이름들은 JSX에서 사용 불가
-                 * class -> className
-                 * for -> htmlFor
-                 */
-                <div>
-                    <div>
-                        <label htmlFor="miles">Miles </label>
-                        <input
-                            id="miles"
-                            // 삼항연산자 활용
-                            value={flipped ? miles / 1.609344 : miles}
-                            type="number"
-                            placeholder="Miles"
-                            onChange={onChange}
-                            // disabled={flipped === true}
-                            disabled={flipped}
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="hours">Km </label>
-                        <input
-                            id="km"
-                            // value={Math.round(minutes / 60)}
-                            // 삼항연산자 활용
-                            value={flipped ? miles : miles * 1.609344}
-                            type="number"
-                            placeholder="Km"
-                            onChange={onChange}
-                            // disabled: 입력 불가
-                            // disabled={flipped === false}
-                            disabled={!flipped}
-                        />
-                    </div>
-
-                    <button onClick={reset}>Reset</button>
-                    <button onClick={onFlip}>Flip</button>
-                </div>
+                <button
+                    style={{
+                        backgroundColor: "tomato",
+                        color: "white",
+                        padding: "10px 20px",
+                        borderRadius: 10,
+                        border: 0,
+                        fontSize,
+                    }}
+                >
+                    {text}
+                </button>
             );
         };
 
         /**
-         * 컴포넌트는 그 안에 또 다른 컴포넌트를 렌더링 가능
-         * 분할 정복(divide and conquer)
+         * [PropTypes] ReactJS에게 prop들의 타입이 무엇인지 알려줌(경고)
+         * 소, 대문자 구분: propTypes - 선언 당시, PropTypes - 선언 안에서 사용될 시
+         * isRequired: 필수 옵션으로 설정
          */
+        Btn.propTypes = {
+            text: PropTypes.string.isRequired,
+            fontSize: PropTypes.number,
+        };
+
         const App = () => {
-            const [index, setIndex] = React.useState("select");
-            const onSelect = (event) => {
-                setIndex(event.target.value);
-            };
             return (
                 <div>
-                    <h1>Super Converter</h1>
-                    <select value={index} onChange={onSelect}>
-                        <option value="select">- Select Units -</option>
-                        <option value="0">Minutes & Hours</option>
-                        <option value="1">Km & Miles</option>
-                    </select>
-                    <hr />
-                    {index === "0" ? <MinutesToHours /> : null}
-                    {index === "1" ? <MilesToKm /> : null}
+                    <Btn text="Save Changes" fontSize={18} />
+                    <Btn text="Continue" />
                 </div>
             );
         };

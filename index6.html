@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <div id="root"></div>
+    </body>
+    <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        const root = document.getElementById("root");
+
+        /**
+         * 니코가 React 돌아가는 원리를 알려주기 위한 코드들
+         * 실제로 아래와 같은 코드들을 현업에서 쓸일은 없다
+         */
+
+        // JSX(대문자로 적을 것, 함수화 시킬 것)
+        const Title = () => (
+            <h3 id="title" onMouseEnter={() => console.log("Mouse enter.")}>
+                Hello! I'm a span.
+            </h3>
+        );
+
+        /**
+        const h3 = React.createElement(
+            "h3",
+            { onMouseEnter: () => console.log("Mouse enter."), id: "title" },
+            "Hello! I'm a span."
+        );
+        */
+
+        const Button = () => (
+            <button
+                style={{
+                    backgroundColor: "tomato",
+                }}
+                onClick={() => console.log("I'm clicked.")}
+            >
+                Click me
+            </button>
+        );
+
+        /*
+        const btn = React.createElement(
+            "button",
+            {
+                onClick: () => console.log("I'm clicked."),
+                style: {
+                    backgroundColor: "tomato",
+                },
+            },
+            "Click me"
+        );
+        */
+
+        /**
+         * 첫 번째 옵션: 해당 엘리멘트 속성
+         * 두 번째 옵션: 해당 엘리멘트 옵션
+         * 세 번째 옵션: 해당 엘리멘트에 속할 contents
+         */
+        // const container = React.createElement("div", null, [Title, Button]);
+
+        const Container = () => (
+            <div>
+                <Title />
+                <Button />
+            </div>
+        );
+
+        // React 18 ver: ReactDOM.createRoot(root).render(container);
+        ReactDOM.render(<Container />, root);
+    </script>
+</html>
